@@ -3,7 +3,7 @@ KCP - A Fast and Reliable ARQ Protocol
 
 [![Powered][2]][1] [![Build Status][4]][5]
 
-[1]: https://github.com/skywind3000/kcp
+[1]: https://github.com/DarkIdiot/kcp
 [2]: http://skywind3000.github.io/word/images/kcp.svg
 [3]: https://raw.githubusercontent.com/skywind3000/kcp/master/kcp.svg
 [4]: https://api.travis-ci.org/skywind3000/kcp.svg?branch=master
@@ -133,71 +133,3 @@ TCP是为流量设计的（每秒内可以传输多少KB的数据），讲究的
 - [传输数据加密](https://github.com/skywind3000/kcp/wiki/Network-Encryption)
 - [应用层流量控制](https://github.com/skywind3000/kcp/wiki/Flow-Control-for-Users)
 - [性能评测](https://github.com/skywind3000/kcp/wiki/KCP-Benchmark)
-
-
-# 开源案例
-
-- [kcptun](https://github.com/xtaci/kcptun): 基于 kcp-go做的高速远程端口转发(隧道) ，配合ssh -D，可以比 shadowsocks 更流畅的看在线视频。
-- [dog-tunnel](https://github.com/vzex/dog-tunnel): GO开发的网络隧道，使用 KCP极大的改进了传输速度，并移植了一份 GO版本 KCP
-- [v2ray](https://www.v2ray.com)：著名代理软件，Shadowsocks 代替者，1.17后集成了 kcp协议，使用UDP传输，无数据包特征。
-- [asio-kcp](https://github.com/libinzhangyuan/asio_kcp): 使用 KCP的完整 UDP网络库，完整实现了基于 UDP的链接状态管理，会话控制，KCP协议调度等
-- [kcp-java](https://github.com/hkspirt/kcp-java)：Java版本 KCP协议实现。
-- [kcp-go](https://github.com/xtaci/kcp-go): 高安全性的kcp的 GO语言实现，包含 UDP会话管理的简单实现，可以作为后续开发的基础库。 
-- [kcp-csharp](https://github.com/limpo1989/kcp-csharp): kcp的 csharp移植，同时包含一份回话管理，可以连接上面kcp-go的服务端。
-- [kcp-rs](https://github.com/en/kcp-rs): KCP的 rust移植
-- [kcp-rust](https://github.com/Matrix-Zhang/kcp)：新版本 KCP的 rust 移植
-- [tokio-kcp](https://github.com/Matrix-Zhang/tokio_kcp)：rust tokio 的 kcp 集成
-- [lua-kcp](https://github.com/linxiaolong/lua-kcp): KCP的 Lua扩展，用于 Lua服务器
-- [node-kcp](https://github.com/leenjewel/node-kcp): node-js 的 KCP 接口  
-- [shadowsocks-android](https://github.com/shadowsocks/shadowsocks-android): Shadowsocks for android 集成了 kcptun 使用 kcp协议加速 shadowsocks，效果不错
-- [kcpuv](https://github.com/elisaday/kcpuv): 使用 libuv开发的kcpuv库，目前还在 Demo阶段
-- [Lantern](https://getlantern.org/)：更好的 VPN，Github 50000 星，使用 kcpgo 加速
-- [rpcx](https://github.com/smallnest/rpcx) ：RPC 框架，1000+ 星，使用 kcpgo 加速 RPC
-- [xkcptun](https://github.com/liudf0716/xkcptun): c语言实现的kcptun，主要用于[OpenWrt](https://github.com/openwrt/openwrt), [LEDE](https://github.com/lede-project/source)开发的路由器项目上
-
-# 商业案例
-
-- [明日帝国](https://www.taptap.com/app/50664)：Game K17 的 《明日帝国》 （Google Play），使用 KCP 加速游戏消息，让全球玩家流畅联网
-- [仙灵大作战](https://www.taptap.com/app/27242)：4399 的 MOBA游戏，使用 KCP 优化游戏同步
-- [CC](http://cc.163.com/)：网易 CC 使用 kcp 加速视频推流，有效提高流畅性
-- [BOBO](http://bobo.163.com/)：网易 BOBO 使用 kcp 加速主播推流
-- [云帆加速](http://www.yfcloud.com/)：使用 KCP 加速文件传输和视频推流，优化了台湾主播推流的流畅度
-
-欢迎告知更多案例
-
-# 协议比较
-
-如果网络永远不卡，那 KCP/TCP 表现类似，但是网络本身就是不可靠的，丢包和抖动无法避免（否则还要各种可靠协议干嘛）。在内网这种几乎理想的环境里直接比较，大家都差不多，但是放到公网上，放到3G/4G网络情况下，或者使用内网丢包模拟，差距就很明显了。公网在高峰期有平均接近10%的丢包，wifi/3g/4g下更糟糕，这些都会让传输变卡。
-
-感谢 [asio-kcp](https://github.com/libinzhangyuan/asio_kcp) 的作者 [zhangyuan](https://github.com/libinzhangyuan) 对 KCP 与 enet, udt做过的一次横向评测，结论如下：
-
-- ASIO-KCP **has good performace in wifi and phone network(3G, 4G)**.
-- The kcp is the **first choice for realtime pvp game**.
-- The lag is less than 1 second when network lag happen. **3 times better than enet** when lag happen.
-- The enet is a good choice if your game allow 2 second lag.
-- **UDT is a bad idea**. It always sink into badly situation of more than serval seconds lag. And the recovery is not expected.
-- enet has the problem of lack of doc. And it has lots of functions that you may intrest.
-- kcp's doc is chinese. Good thing is the function detail which is writen in code is english. And you can use asio_kcp which is a good wrap.
-- The kcp is a simple thing. You will write more code if you want more feature.
-- UDT has a perfect doc. UDT may has more bug than others as I feeling.
-
-具体见：[横向比较](https://github.com/libinzhangyuan/reliable_udp_bench_mark) 和 [评测数据](https://github.com/skywind3000/kcp/wiki/KCP-Benchmark)，为犹豫选择的人提供了更多指引。
-
-
-
-# 欢迎捐赠
-
-![欢迎使用支付宝对该项目进行捐赠](https://raw.githubusercontent.com/skywind3000/kcp/master/donation.png)
-
-欢迎使用支付宝手扫描上面的二维码，对该项目进行捐赠。捐赠款项将用于持续优化 KCP协议以及完善文档。
-
-感谢：明明、星仔、进、帆、颁钊、斌铨、晓丹、余争、虎、晟敢、徐玮、王川、赵刚强、胡知锋、万新朝、何新超、刘旸、侯宪辉、吴佩仪、华斌、如涛、胡坚。。。（早先的名单实在不好意思没记录下来）等同学的捐助与支持。
-
-
-欢迎关注
-
-KCP交流群：364933586（QQ群号），KCP集成，调优，网络传输以及相关技术讨论
-
-blog: http://www.skywind.me
-
-zhihu: https://www.zhihu.com/people/skywind3000
