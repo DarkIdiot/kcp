@@ -203,7 +203,7 @@ public:
 
 	// 接收数据
 	int recv(int peer, void *data, int maxsize) {
-		DelayTunnel::iterator it;
+		auto it;
 		if (peer == 0) {
 			it = p21.begin();
 			if (p21.size() == 0) return -1;

@@ -6,7 +6,7 @@ snd_una 第一个未确认的包
 snd_nxt	待发送包的序号
 rcv_nxt 待接收消息序号
 ssthresh 拥塞窗口阈值 
-rx_rttvar	ack接收rtt浮动值
+rx_rttval	ack接收rtt浮动值
 rx_srtt ack接收rtt静态值
 rx_rto	由ack接收延迟计算出来的复原时间
 rx_minrto 最小复原时间
