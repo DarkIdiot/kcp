@@ -121,7 +121,57 @@ TCP是为流量设计的（每秒内可以传输多少KB的数据），讲究的
    ```cpp
    kcp->rx_minrto = 10;
    ```
+# 协议定义
+struct segment{
 
+    conv uint32 // conversation id
+    
+发送端与接收端通信时的匹配数字，发送端发送的数据包中此值与接收端的conv值匹配一致时，接收端才会接受此包
+
+    cmd uint8   // 数据包的协议号
+
+数据包的协议号，协议号有以下枚举：
+ ```javascript
+    IKCP_CMD_PUSH = 81 -- cmd: push data，数据包
+    IKCP_CMD_ACK = 82 -- cmd: ack，确认包，告诉对方收到数据包
+    IKCP_CMD_WASK = 83 -- cmd: window probe (ask)，询问远端滑动窗口的大小
+    IKCP_CMD_WINS = 84 -- cmd: window size (tell)，告知远端滑动窗口的大小
+```   
+
+     frg uint8
+分帧号，由于udp传输有数据包大小的限制，因此，应用层一个数据包可能被分为多个udp包,序号依次递减，例如： 3、 2、 1、 0
+
+    wnd uint16
+滑动窗口的大小,当Segment作为数据发送方时，此wnd为本机滑动窗口大小，用于告诉远端自己窗口剩余多少;
+当Segment做为接收到数据时，此wnd为远端滑动窗口大小，让本机知道了远端窗口剩余多少后，可以控制自己接下来发送数据的大小
+
+    ts uint32
+timestamp , 当前Segment发送时的时间戳
+
+    sn uint32
+Sequence Number,Segment数据包的编号
+ 
+    una uint32
+ una即unacknowledged,未确认数据包的编号，表示此编号前的所有包都已收到了。
+ 
+    rto uint32
+ rto即Retransmission TimeOut，即超时重传时间，在发送出去时根据之前的网络情况进行设置
+ 
+    xmit uint32
+ 基本类似于Segment发送的次数，每发送一次会自加一。用于统计该Segment被重传了几次，用于参考，进行调节
+ 
+    resendts uint32
+即resend timestamp , 指定重发的时间戳，当当前时间超过这个时间时，则再重发一次这个包。
+
+    fastack uint32
+用于以数据驱动的快速重传机制；
+
+    len uint32
+ 数据包的数据长度
+ 
+    data []byte
+ 协议数据的具体内容
+ }
 
 # 文档索引
 
