@@ -1,4 +1,4 @@
-```asm
+```c
     typedef struct _ENetProtocolHeader{
         enet_uint16 peerID;
         enet_uint16 sentTime;
