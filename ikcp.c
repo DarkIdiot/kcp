@@ -536,7 +536,7 @@ int ikcp_send(ikcpcb *kcp, const char *buffer, int len)
 
 
 //---------------------------------------------------------------------
-// parse ack
+// parse ack  calculate rto
 //---------------------------------------------------------------------
 static void ikcp_update_ack(ikcpcb *kcp, IINT32 rtt)
 {
